@@ -32,11 +32,11 @@ jobs:
             export HOMEBREW_NO_AUTO_UPDATE=1
             brew update-reset
             # Mirror the repo as a tap.
-            # TAP_DIR="$(brew --repository)/Library/Taps/${TRAVIS_REPO_SLUG}"
-            # mkdir -p "${TAP_DIR}"
-            # rsync -az --delete "${TRAVIS_BUILD_DIR}/" "${TAP_DIR}/"
-            # export TRAVIS_BUILD_DIR="${TAP_DIR}"
-            # builtin cd "${TRAVIS_BUILD_DIR}"
+            TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
+            mkdir -p "${TAP_DIR}"
+            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
+            export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
+            builtin cd "${CIRCLE_WORKING_DIRECTORY}"
             brew cask ci
       - save_cache:
           key: dependency-bundle
