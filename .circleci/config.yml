@@ -11,11 +11,14 @@ jobs:
       - restore_cache:
           key: dependency-portable-ruby
       - run:
-          name: build
+          name: force strict error checking
           command: |
             # Force strict error checking.
             set -o errexit
             set -o pipefail
+      - run:
+          name: Update Travis commit range.
+          command: |
             # Update Travis commit range.
             # This is not normally required but does prevent problems with outdated forks and
             # deleted casks (see https://github.com/Homebrew/homebrew-cask/pull/43164).
@@ -26,17 +29,26 @@ jobs:
             # MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
             # fi
             # export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"
+      - run:
+          name: Switch to master branch.
+          command: |
             # Switch to master branch.
             export HOMEBREW_COLOR=1
             export HOMEBREW_DEVELOPER=1
             export HOMEBREW_NO_AUTO_UPDATE=1
             brew update-reset
+      - run:
+          name: Mirror the repo as a tap.
+          command: |
             # Mirror the repo as a tap.
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
             mkdir -p "${TAP_DIR}"
             rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
             builtin cd "${CIRCLE_WORKING_DIRECTORY}"
+      - run:
+          name: Brew cask CI
+          command: |
             brew cask ci
       - save_cache:
           key: dependency-bundle
