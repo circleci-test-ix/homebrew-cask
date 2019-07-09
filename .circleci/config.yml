@@ -19,6 +19,7 @@ jobs:
             # Force strict error checking.
             set -o errexit
             set -o pipefail
+      - compare-url/reconstruct
       - compare-url/use:
           custom-logic: |
             echo $COMMIT_RANGE
