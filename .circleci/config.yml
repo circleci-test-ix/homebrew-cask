@@ -45,25 +45,21 @@ jobs:
           command: |
             # Mirror the repo as a tap.
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
-            echo ${CIRCLE_WORKING_DIRECTORY}
             mkdir -p ${TAP_DIR}
-            sudo rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
-            # builtin cd "${TAP_DIR}"
-            # pwd
-            # brew cask ci
+            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             echo 'export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"' >> $BASH_ENV
             # export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
             builtin cd "${CIRCLE_WORKING_DIRECTORY}"
-            brew cask ci
-#       - run:
-#           name: Brew cask CI
-#           command: |
+            # brew cask ci
+      - run:
+          name: Brew cask CI
+          command: |
 #             echo ${TAP_DIR}
 #             builtin cd "${TAP_DIR}"            
 #             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
 #             echo ${TAP_DIR}
 #             builtin cd "${TAP_DIR}"
-#             brew cask ci
+            brew cask ci
       - save_cache:
           key: dependency-bundle
           paths:
