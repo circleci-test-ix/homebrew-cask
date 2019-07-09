@@ -33,9 +33,9 @@ jobs:
           name: Switch to master branch.
           command: |
             # Switch to master branch.
-            export HOMEBREW_COLOR=1
-            export HOMEBREW_DEVELOPER=1
-            export HOMEBREW_NO_AUTO_UPDATE=1
+            echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
+            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
+            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
             brew update-reset
       - run:
           name: "Fix CIRCLE_WORKING_DIRECTORY"
@@ -47,11 +47,13 @@ jobs:
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
             mkdir -p ${TAP_DIR}
             sudo rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
-            builtin cd "${TAP_DIR}"
-            pwd
-            brew cask ci
+            # builtin cd "${TAP_DIR}"
+            # pwd
+            # brew cask ci
+            echo 'export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"' >> $BASH_ENV
             # export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
-            # builtin cd "${CIRCLE_WORKING_DIRECTORY}"
+            builtin cd "${CIRCLE_WORKING_DIRECTORY}"
+            brew cask ci
 #       - run:
 #           name: Brew cask CI
 #           command: |
