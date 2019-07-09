@@ -53,6 +53,10 @@ jobs:
       - run:
           name: Brew cask CI
           command: |
+            echo ${TAP_DIR}
+            builtin cd "${TAP_DIR}"            
+            TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
+            echo ${TAP_DIR}
             builtin cd "${TAP_DIR}"
             brew cask ci
       - save_cache:
