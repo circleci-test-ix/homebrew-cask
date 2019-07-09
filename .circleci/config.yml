@@ -54,6 +54,7 @@ jobs:
       - run:
           name: Brew cask CI
           command: |
+            pwd
             brew cask ci
       - save_cache:
           key: dependency-bundle
