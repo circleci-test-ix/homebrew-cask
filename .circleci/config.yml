@@ -43,8 +43,9 @@ jobs:
             # Mirror the repo as a tap.
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
             echo ${TAP_DIR}
+            echo ${CIRCLE_WORKING_DIRECTORY}
             mkdir -p ${TAP_DIR}
-            mkdir -p "${TAP_DIR}"
+            # mkdir -p "${TAP_DIR}"
             rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
             builtin cd "${CIRCLE_WORKING_DIRECTORY}"
