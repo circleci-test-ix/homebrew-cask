@@ -47,11 +47,13 @@ jobs:
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_REPONAME}"
             mkdir -p ${TAP_DIR}
             sudo rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
-            export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
-            builtin cd "${CIRCLE_WORKING_DIRECTORY}"
+            # builtin cd "${TAP_DIR}"
+            # export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
+            # builtin cd "${CIRCLE_WORKING_DIRECTORY}"
       - run:
           name: Brew cask CI
           command: |
+            builtin cd "${TAP_DIR}"
             brew cask ci
       - save_cache:
           key: dependency-bundle
