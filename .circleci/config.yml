@@ -19,6 +19,7 @@ jobs:
       - run:
           name: Update Travis commit range.
           command: |
+            echo ${CIRCLE_COMPARE_URL}
             COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
             # Fix single commit, unfortunately we don't always get a commit range from Circle CI
             if [[ $COMMIT_RANGE != *"..."* ]]; then
