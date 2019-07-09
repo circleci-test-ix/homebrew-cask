@@ -46,7 +46,7 @@ jobs:
             echo ${CIRCLE_WORKING_DIRECTORY}
             mkdir -p ${TAP_DIR}
             # mkdir -p "${TAP_DIR}"
-            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
+            sudo rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
             builtin cd "${CIRCLE_WORKING_DIRECTORY}"
 #       - run:
