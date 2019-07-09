@@ -19,6 +19,18 @@ jobs:
       - run:
           name: Update Travis commit range.
           command: |
+            COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
+            # Fix single commit, unfortunately we don't always get a commit range from Circle CI
+            if [[ $COMMIT_RANGE != *"..."* ]]; then
+              COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
+            fi
+            BRANCH_COMMIT="${COMMIT_RANGE##*.}"
+            TARGET_COMMIT="${COMMIT_RANGE%%.*}"
+            if ! MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}" 2>/dev/null)"; then
+              git fetch --unshallow
+              MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
+            fi
+            export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"
             # Update Travis commit range.
             # This is not normally required but does prevent problems with outdated forks and
             # deleted casks (see https://github.com/Homebrew/homebrew-cask/pull/43164).
