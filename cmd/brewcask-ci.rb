@@ -136,12 +136,12 @@ module Cask
       end
 
       def tap
-        puts "inside tap"
+        $stdout.puts "inside tap"
         @tap ||= if ENV.key?("TRAVIS_REPO_SLUG")
-          puts "before tap.fetch"
+          $stdout.puts "before tap.fetch"
           Tap.fetch(ENV["TRAVIS_REPO_SLUG"])
         else
-          puts "before tap.from_path"
+          $stdout.puts "before tap.from_path"
           Tap.from_path(Dir.pwd)
         end
       end
