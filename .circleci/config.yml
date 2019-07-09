@@ -24,13 +24,18 @@ jobs:
             if [[ $COMMIT_RANGE != *"..."* ]]; then
               COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
             fi
+            echo $COMMIT_RANGE
             BRANCH_COMMIT="${COMMIT_RANGE##*.}"
             TARGET_COMMIT="${COMMIT_RANGE%%.*}"
-            if ! MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}" 2>/dev/null)"; then
+            echo ${BRANCH_COMMIT}
+            echo ${TARGET_COMMIT}
+            if ! MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}" 2>/dev/null)"; then              
+              echo about to fetch shallow
               git fetch --unshallow
               MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
             fi
-            export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"
+            # export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"
+            echo 'export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"' >> $BASH_ENV
             # Update Travis commit range.
             # This is not normally required but does prevent problems with outdated forks and
             # deleted casks (see https://github.com/Homebrew/homebrew-cask/pull/43164).
