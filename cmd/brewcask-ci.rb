@@ -18,9 +18,9 @@ module Cask
         $stdout.sync = true
         $stderr.sync = true
 
-        # unless tap
-        #  raise CaskError, "This command must be run from inside a tap directory."
-        # end
+        unless tap
+         raise CaskError, "This command must be run from inside a tap directory."
+        end
 
         ruby_files_in_wrong_directory = modified_ruby_files - (modified_cask_files + modified_command_files + modified_github_files)
 
@@ -136,12 +136,9 @@ module Cask
       end
 
       def tap
-        $stdout.puts "inside tap"
         @tap ||= if ENV.key?("TRAVIS_REPO_SLUG")
-          $stdout.puts "before tap.fetch"
           Tap.fetch(ENV["TRAVIS_REPO_SLUG"])
         else
-          $stdout.puts "before tap.from_path"
           Tap.from_path(Dir.pwd)
         end
       end
