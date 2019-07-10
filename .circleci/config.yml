@@ -50,6 +50,7 @@ jobs:
           name: Mirror the repo as a tap.
           command: |
             # Mirror the repo as a tap.            
+            echo ${TRAVIS_COMMIT_RANGE}
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             mkdir -p ${TAP_DIR}            
             rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
