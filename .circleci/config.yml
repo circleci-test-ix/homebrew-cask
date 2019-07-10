@@ -9,10 +9,10 @@ jobs:
       xcode: "10.0"
     steps:
       - checkout
-#       - restore_cache:
-#           key: dependency-bundle
-#       - restore_cache:
-#           key: dependency-portable-ruby
+      - restore_cache:
+          key: dependency-bundle
+      - restore_cache:
+          key: dependency-portable-ruby
       - run:
           name: force strict error checking
           command: |
@@ -33,11 +33,17 @@ jobs:
       - run:
           name: Switch to master branch.
           command: |
-            # Switch to master branch.
-            echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
-            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
-            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+            brew --version
+            brew remove $(brew list)
+            rm -rf /usr/local/Homebrew/Library/Taps/
             brew update-reset
+            brew --env
+            brew config
+            # Switch to master branch.
+            #echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
+            #echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
+            3echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+            #brew update-reset
       - run:
           name: "Fix CIRCLE_WORKING_DIRECTORY"
           command: echo 'CIRCLE_WORKING_DIRECTORY="${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}"' >> $BASH_ENV
@@ -46,16 +52,15 @@ jobs:
           command: |
             # Mirror the repo as a tap.            
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            mkdir -p ${TAP_DIR}
-            cp -a ./ ${TAP_DIR}
-            # rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
+            mkdir -p ${TAP_DIR}            
+            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             builtin cd "${TAP_DIR}"
             brew cask ci
-#       - save_cache:
-#           key: dependency-bundle
-#           paths:
-#             - /usr/local/Homebrew/Library/Homebrew/vendor/bundle
-#       - save_cache:
-#           key: dependency-portable-ruby
-#           paths:
-#             - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
+      - save_cache:
+          key: dependency-bundle
+          paths:
+            - /usr/local/Homebrew/Library/Homebrew/vendor/bundle
+      - save_cache:
+          key: dependency-portable-ruby
+          paths:
+            - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
