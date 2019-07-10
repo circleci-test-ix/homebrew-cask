@@ -42,7 +42,7 @@ jobs:
             # Switch to master branch.
             #echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
             #echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
-            3echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+            #echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
             #brew update-reset
       - run:
           name: "Fix CIRCLE_WORKING_DIRECTORY"
