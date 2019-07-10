@@ -34,6 +34,8 @@ module Cask
         end
 
         overall_success = true
+        
+        raise CaskError, "**** DEBUG **** " + modified_cask_files.join("\n")
 
         modified_cask_files.each do |path|
           cask = CaskLoader.load(path)
