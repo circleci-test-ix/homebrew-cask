@@ -47,7 +47,7 @@ jobs:
             # Mirror the repo as a tap.            
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             mkdir -p ${TAP_DIR}
-            ln -s $PWD $(brew --repo)/Library/Taps/cossacklabs/homebrew-tap
+            ln -s $PWD ${TAP_DIR}
             # rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             # builtin cd "${TAP_DIR}"
             brew cask ci
