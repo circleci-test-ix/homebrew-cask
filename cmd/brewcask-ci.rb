@@ -35,7 +35,7 @@ module Cask
 
         overall_success = true
         
-        raise CaskError, "**** DEBUG **** " + modified_cask_files.join("\n")
+        raise CaskError, "**** DEBUG **** " + ENV["TRAVIS_COMMIT_RANGE"]
 
         modified_cask_files.each do |path|
           cask = CaskLoader.load(path)
