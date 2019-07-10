@@ -33,6 +33,7 @@ jobs:
             fi
             echo ${MERGE_BASE}
             echo 'export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"' >> $BASH_ENV
+            echo ${TRAVIS_COMMIT_RANGE}
       - run:
           name: Switch to master branch.
           command: |
