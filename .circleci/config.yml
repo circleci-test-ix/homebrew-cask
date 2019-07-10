@@ -9,10 +9,10 @@ jobs:
       xcode: "10.0"
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-bundle
-      - restore_cache:
-          key: dependency-portable-ruby
+#       - restore_cache:
+#           key: dependency-bundle
+#       - restore_cache:
+#           key: dependency-portable-ruby
       - run:
           name: force strict error checking
           command: |
@@ -44,17 +44,18 @@ jobs:
       - run:
           name: Mirror the repo as a tap.
           command: |
-            # Mirror the repo as a tap.
+            # Mirror the repo as a tap.            
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             mkdir -p ${TAP_DIR}
-            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
-            builtin cd "${TAP_DIR}"
+            ln -s $PWD $(brew --repo)/Library/Taps/cossacklabs/homebrew-tap
+            # rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
+            # builtin cd "${TAP_DIR}"
             brew cask ci
-      - save_cache:
-          key: dependency-bundle
-          paths:
-            - /usr/local/Homebrew/Library/Homebrew/vendor/bundle
-      - save_cache:
-          key: dependency-portable-ruby
-          paths:
-            - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
+#       - save_cache:
+#           key: dependency-bundle
+#           paths:
+#             - /usr/local/Homebrew/Library/Homebrew/vendor/bundle
+#       - save_cache:
+#           key: dependency-portable-ruby
+#           paths:
+#             - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
