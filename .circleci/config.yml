@@ -23,16 +23,19 @@ jobs:
       - compare-url/use:
           step-name: Update Travis commit range.
           custom-logic: |            
-            BRANCH_COMMIT="${COMMIT_RANGE##*.}"
-            TARGET_COMMIT="${COMMIT_RANGE%%.*}"
+            echo 'export BRANCH_COMMIT="${COMMIT_RANGE##*.}"' >> $BASH_ENV
+            echo 'export TARGET_COMMIT="${COMMIT_RANGE%%.*}"' >> $BASH_ENV
             echo ${BRANCH_COMMIT}
             echo ${TARGET_COMMIT}
-            if ! MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}" 2>/dev/null)"; then              
+            echo 'export MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}" 2>/dev/null)"' >> $BASH_ENV
+            if ! $MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}" 2>/dev/null)"; then              
               git fetch --unshallow
-              MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
+              echo 'export MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"' >> $BASH_ENV
             fi
             echo ${MERGE_BASE}
-            TRAVIS_COMMIT_RANGE="$MERGE_BASE...$BRANCH_COMMIT"
+            echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
+            echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
+            #TRAVIS_COMMIT_RANGE="$MERGE_BASE...$BRANCH_COMMIT"
             echo 'export TRAVIS_COMMIT_RANGE="$MERGE_BASE...$BRANCH_COMMIT"' >> $BASH_ENV
             echo ${TRAVIS_COMMIT_RANGE}
       - run:
