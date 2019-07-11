@@ -9,10 +9,10 @@ jobs:
       xcode: "10.0"
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-bundle
-      - restore_cache:
-          key: dependency-portable-ruby
+#       - restore_cache:
+#           key: dependency-bundle
+#       - restore_cache:
+#           key: dependency-portable-ruby
       - run:
           name: force strict error checking
           command: |
@@ -32,33 +32,36 @@ jobs:
             TRAVIS_COMMIT_RANGE_1="${MERGE_BASE}...${BRANCH_COMMIT}"
             echo 'export TRAVIS_COMMIT_RANGE="$TRAVIS_COMMIT_RANGE_1"' >> $BASH_ENV
       - run:
-          name: Switch to master branch.
-          command: |
-            # Switch to master branch.
-            echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
-            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
-            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
-            brew update-reset
-      - run:
-          name: "Fix CIRCLE_WORKING_DIRECTORY"
-          command: echo 'CIRCLE_WORKING_DIRECTORY="${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}"' >> $BASH_ENV
-      - run:
-          name: Mirror the repo as a tap.
-          command: |
-            # Mirror the repo as a tap.    
-            echo **HELLO**
-            echo ${TRAVIS_COMMIT_RANGE}
-            echo **HELLO AGAIN**
-            TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            mkdir -p ${TAP_DIR}            
-            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
-            builtin cd "${TAP_DIR}"
-            brew cask ci
-      - save_cache:
-          key: dependency-bundle
-          paths:
-            - /usr/local/Homebrew/Library/Homebrew/vendor/bundle
-      - save_cache:
-          key: dependency-portable-ruby
-          paths:
-            - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
+          name: "What is my commit range environment variable"
+          command: echo $TRAVIS_COMMIT_RANGE
+#       - run:
+#           name: Switch to master branch.
+#           command: |
+#             # Switch to master branch.
+#             echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
+#             echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
+#             echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+#             brew update-reset
+#       - run:
+#           name: "Fix CIRCLE_WORKING_DIRECTORY"
+#           command: echo 'CIRCLE_WORKING_DIRECTORY="${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}"' >> $BASH_ENV
+#       - run:
+#           name: Mirror the repo as a tap.
+#           command: |
+#             # Mirror the repo as a tap.    
+#             echo **HELLO**
+#             echo ${TRAVIS_COMMIT_RANGE}
+#             echo **HELLO AGAIN**
+#             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+#             mkdir -p ${TAP_DIR}            
+#             rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
+#             builtin cd "${TAP_DIR}"
+#             brew cask ci
+#       - save_cache:
+#           key: dependency-bundle
+#           paths:
+#             - /usr/local/Homebrew/Library/Homebrew/vendor/bundle
+#       - save_cache:
+#           key: dependency-portable-ruby
+#           paths:
+#             - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
