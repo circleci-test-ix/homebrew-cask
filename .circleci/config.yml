@@ -15,9 +15,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: homebrew-{{ .Branch }}
-      - restore_cache:
-          key: ruby-{{ .Branch }}
+          key: homebrew
       - run:
           name: force strict error checking
           command: |
@@ -34,7 +32,8 @@ jobs:
               git fetch --unshallow
               MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
             fi
-            echo 'export TRAVIS_COMMIT_RANGE='"$MERGE_BASE...$BRANCH_COMMIT" >> $BASH_ENV            
+            #echo 'export TRAVIS_COMMIT_RANGE='"$MERGE_BASE...$BRANCH_COMMIT" >> $BASH_ENV
+            echo 'export TRAVIS_COMMIT_RANGE='"bc6b0ba9d3ea965c9da36c46f12672d2a78726b5...04714d5ee49d" >> $BASH_ENV
       - run:
           name: Switch to master branch.
           command: |
@@ -59,11 +58,6 @@ jobs:
             # Run the script
             brew cask ci
       - save_cache:
-          key: homebrew-{{ .Branch }}
+          key: homebrew
           paths:
             - /usr/local/Homebrew/Library/Homebrew
-      - save_cache:
-          key: ruby-{{ .Branch }}
-          paths:
-            - ~/.rvm
-            - ~/.bundle
