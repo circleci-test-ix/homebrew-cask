@@ -37,6 +37,9 @@ jobs:
             echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
             echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
             echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+            source $BASH_ENV
+            brew remove $(brew list)
+            rm -rf /usr/local/Homebrew/Library/Taps/
             brew update-reset
       - run:
           name: "Fix CIRCLE_WORKING_DIRECTORY"
