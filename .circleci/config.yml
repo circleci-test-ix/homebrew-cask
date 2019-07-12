@@ -15,9 +15,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-bundle-{{ .Branch }}
+          key: homebrew-{{ .Branch }}
       - restore_cache:
-          key: dependency-portable-ruby-{{ .Branch }}
+          key: ruby-{{ .Branch }}
       - run:
           name: force strict error checking
           command: |
@@ -34,8 +34,7 @@ jobs:
               git fetch --unshallow
               MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
             fi
-            #echo 'export TRAVIS_COMMIT_RANGE='"$MERGE_BASE...$BRANCH_COMMIT" >> $BASH_ENV
-            echo 'export TRAVIS_COMMIT_RANGE='"bc6b0ba9d3ea965c9da36c46f12672d2a78726b5...04714d5ee49d" >> $BASH_ENV            
+            echo 'export TRAVIS_COMMIT_RANGE='"$MERGE_BASE...$BRANCH_COMMIT" >> $BASH_ENV            
       - run:
           name: Switch to master branch.
           command: |
@@ -45,7 +44,7 @@ jobs:
           name: "Fix CIRCLE_WORKING_DIRECTORY"
           command: echo 'CIRCLE_WORKING_DIRECTORY="${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}"' >> $BASH_ENV
       - run:
-          name: Mirror the repo as a tap.
+          name: Mirror the repo as a tap and run the ci cask.
           command: |
             # Mirror the repo as a tap.
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"            
@@ -60,12 +59,11 @@ jobs:
             # Run the script
             brew cask ci
       - save_cache:
-          key: dependency-bundle-{{ .Branch }}
+          key: homebrew-{{ .Branch }}
           paths:
             - /usr/local/Homebrew/Library/Homebrew
-            # - vendor/bundle
       - save_cache:
-          key: dependency-portable-ruby-{{ .Branch }}
+          key: ruby-{{ .Branch }}
           paths:
             - ~/.rvm
             - ~/.bundle
