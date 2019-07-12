@@ -35,6 +35,9 @@ jobs:
             echo 'export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"' >> $BASH_ENV
       - run:
           name: "What is my commit range environment variable"
+          command: echo $COMMIT_RANGE
+      - run:
+          name: "What is my TRAVIS commit range environment variable"
           command: echo $TRAVIS_COMMIT_RANGE
 #       - run:
 #           name: Switch to master branch.
