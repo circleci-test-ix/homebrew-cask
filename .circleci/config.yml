@@ -55,7 +55,7 @@ jobs:
             echo "${TRAVIS_COMMIT_RANGE}"
             echo "${CIRCLE_WORKING_DIRECTORY}"
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "${TAP_DIR}
+            echo "${TAP_DIR}"
             mkdir -p ${TAP_DIR}            
             rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             #echo 'export CIRCLE_WORKING_DIRECTORY='"$TAP_DIR" >> $BASH_ENV
