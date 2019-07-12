@@ -1,5 +1,6 @@
 version: 2.1
 
+# Import the compare-url orb so we can get the git commit range
 orbs:
   compare-url: iynere/compare-url@1.2.0
 
@@ -10,6 +11,7 @@ jobs:
     environment:
       HOMEBREW_DEVELOPER: 1
       HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_COLOR=1
     steps:
       - checkout
       - restore_cache:
@@ -38,38 +40,24 @@ jobs:
           name: Switch to master branch.
           command: |
             # Switch to master branch.
-            # echo 'export HOMEBREW_COLOR=1' >> $BASH_ENV
-            # echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
-            # echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
-            # source $BASH_ENV
-            # brew remove $(brew list)
-            # rm -rf /usr/local/Homebrew/Library/Taps/
-            # export HOMEBREW_COLOR=1
-            # export HOMEBREW_DEVELOPER=1
-            # export HOMEBREW_NO_AUTO_UPDATE=1    
-            brew --version
             brew update-reset
-            brew --env
-            brew config
-            # brew update-reset
       - run:
           name: "Fix CIRCLE_WORKING_DIRECTORY"
           command: echo 'CIRCLE_WORKING_DIRECTORY="${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}"' >> $BASH_ENV
       - run:
           name: Mirror the repo as a tap.
           command: |
-            # Mirror the repo as a tap.    
-            echo "${TRAVIS_COMMIT_RANGE}"
-            echo "${CIRCLE_WORKING_DIRECTORY}"
-            TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "${TAP_DIR}"
+            # Mirror the repo as a tap.
+            TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"            
             mkdir -p ${TAP_DIR}            
-            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
-            #echo 'export CIRCLE_WORKING_DIRECTORY='"$TAP_DIR" >> $BASH_ENV
+            rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"            
             export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
             builtin cd "${CIRCLE_WORKING_DIRECTORY}"
-            #builtin cd "${TAP_DIR}"
+            
+            # Workaround so we don't run into permission issues
             sudo rm -rf /Library/LaunchDaemons/com.circleci.pfctl.plist
+            
+            # Run the script
             brew cask ci
       - save_cache:
           key: dependency-bundle
