@@ -69,6 +69,7 @@ jobs:
             export CIRCLE_WORKING_DIRECTORY="${TAP_DIR}"
             builtin cd "${CIRCLE_WORKING_DIRECTORY}"
             #builtin cd "${TAP_DIR}"
+            sudo rm -rf /Library/LaunchDaemons/com.circleci.pfctl.plist
             brew cask ci
       - save_cache:
           key: dependency-bundle
