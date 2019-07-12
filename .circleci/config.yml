@@ -22,6 +22,7 @@ jobs:
       - compare-url/reconstruct
       - compare-url/use:
           step-name: Update Travis commit range.
+          attach-workspace: true
           custom-logic: |            
             BRANCH_COMMIT="${COMMIT_RANGE##*.}"
             TARGET_COMMIT="${COMMIT_RANGE%%.*}"
@@ -29,7 +30,8 @@ jobs:
               git fetch --unshallow
               MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
             fi
-            #TRAVIS_COMMIT_RANGE_1="${MERGE_BASE}...${BRANCH_COMMIT}"
+            TRAVIS_COMMIT_RANGE_1="${MERGE_BASE}...${BRANCH_COMMIT}"
+            echo $TRAVIS_COMMIT_RANGE_1
             echo 'export TRAVIS_COMMIT_RANGE="${MERGE_BASE}...${BRANCH_COMMIT}"' >> $BASH_ENV
       - run:
           name: "What is my commit range environment variable"
