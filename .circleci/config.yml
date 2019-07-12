@@ -9,8 +9,8 @@ jobs:
     macos:
       xcode: "10.0"
     environment:
-      HOMEBREW_DEVELOPER: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_DEVELOPER=1
+      HOMEBREW_NO_AUTO_UPDATE=1
       HOMEBREW_COLOR=1
     steps:
       - checkout
