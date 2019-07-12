@@ -7,6 +7,9 @@ jobs:
   build:
     macos:
       xcode: "10.0"
+    environment:
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - checkout
       - restore_cache:
@@ -41,10 +44,14 @@ jobs:
             # source $BASH_ENV
             # brew remove $(brew list)
             # rm -rf /usr/local/Homebrew/Library/Taps/
-            export HOMEBREW_COLOR=1
-            export HOMEBREW_DEVELOPER=1
-            export HOMEBREW_NO_AUTO_UPDATE=1    
+            # export HOMEBREW_COLOR=1
+            # export HOMEBREW_DEVELOPER=1
+            # export HOMEBREW_NO_AUTO_UPDATE=1    
+            brew --version
             brew update-reset
+            brew --env
+            brew config
+            # brew update-reset
       - run:
           name: "Fix CIRCLE_WORKING_DIRECTORY"
           command: echo 'CIRCLE_WORKING_DIRECTORY="${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}"' >> $BASH_ENV
