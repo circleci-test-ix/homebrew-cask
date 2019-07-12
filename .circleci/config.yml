@@ -69,3 +69,4 @@ jobs:
           paths:
 #             - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
             - ~/.rvm
+            - ~/.bundle
