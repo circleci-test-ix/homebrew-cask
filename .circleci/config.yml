@@ -63,7 +63,9 @@ jobs:
           key: dependency-bundle
           paths:
             - /usr/local/Homebrew/Library/Homebrew/vendor/bundle
+            - vendor/bundle
       - save_cache:
           key: dependency-portable-ruby
           paths:
             - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
+            - ~/.rvm
