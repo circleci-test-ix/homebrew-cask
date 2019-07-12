@@ -67,6 +67,5 @@ jobs:
       - save_cache:
           key: dependency-portable-ruby-{{ .Branch }}
           paths:
-#             - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
             - ~/.rvm
             - ~/.bundle
