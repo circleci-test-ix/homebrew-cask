@@ -9,10 +9,10 @@ jobs:
       xcode: "10.2.0"
     steps:
       - checkout
-#       - restore_cache:
-#           key: dependency-bundle
-#       - restore_cache:
-#           key: dependency-portable-ruby
+      - restore_cache:
+          key: dependency-bundle
+      - restore_cache:
+          key: dependency-portable-ruby
       - run:
           name: force strict error checking
           command: |
@@ -29,17 +29,7 @@ jobs:
               git fetch --unshallow
               MERGE_BASE="$(git merge-base "${BRANCH_COMMIT}" "${TARGET_COMMIT}")"
             fi
-            TRAVIS_COMMIT_RANGE_1="${MERGE_BASE}...${BRANCH_COMMIT}"
-            echo $TRAVIS_COMMIT_RANGE_1
-            echo 'export BRANCH_COMMIT="$COMMIT_RANGE"' >> $BASH_ENV
-            echo 'export BRANCH_COMMIT_1='"$COMMIT_RANGE" >> $BASH_ENV
             echo 'export TRAVIS_COMMIT_RANGE='"$MERGE_BASE...$BRANCH_COMMIT" >> $BASH_ENV
-      - run:
-          name: "What is my TRAVIS commit range environment variable"
-          command: |
-            echo "$BRANCH_COMMIT"
-            echo "$BRANCH_COMMIT_1"
-            echo "$TRAVIS_COMMIT_RANGE"
       - run:
           name: Switch to master branch.
           command: |
@@ -55,14 +45,12 @@ jobs:
           name: Mirror the repo as a tap.
           command: |
             # Mirror the repo as a tap.    
-            echo **HELLO**
             echo "${TRAVIS_COMMIT_RANGE}"
-            echo **HELLO AGAIN**
             TAP_DIR="$(brew --repository)/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             mkdir -p ${TAP_DIR}            
             rsync -az --delete "${CIRCLE_WORKING_DIRECTORY}/" "${TAP_DIR}/"
             builtin cd "${TAP_DIR}"
-            brew cask ci
+            sudo brew cask ci
       - save_cache:
           key: dependency-bundle
           paths:
