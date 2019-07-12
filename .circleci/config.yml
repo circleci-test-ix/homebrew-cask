@@ -22,7 +22,6 @@ jobs:
       - compare-url/reconstruct
       - compare-url/use:
           step-name: Update Travis commit range.
-          attach-workspace: true
           custom-logic: |            
             BRANCH_COMMIT="${COMMIT_RANGE##*.}"
             TARGET_COMMIT="${COMMIT_RANGE%%.*}"
