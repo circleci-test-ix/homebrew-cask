@@ -15,9 +15,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-bundle
+          key: dependency-bundle-{{ .Branch }}
       - restore_cache:
-          key: dependency-portable-ruby
+          key: dependency-portable-ruby-{{ .Branch }}
       - run:
           name: force strict error checking
           command: |
@@ -60,12 +60,12 @@ jobs:
             # Run the script
             brew cask ci
       - save_cache:
-          key: dependency-bundle
+          key: dependency-bundle-{{ .Branch }}
           paths:
-            - /usr/local/Homebrew
-            - vendor/bundle
+            - /usr/local/Homebrew/Library/Homebrew
+            # - vendor/bundle
       - save_cache:
-          key: dependency-portable-ruby
+          key: dependency-portable-ruby-{{ .Branch }}
           paths:
 #             - /usr/local/Homebrew/Library/Homebrew/vendor/portable-ruby
             - ~/.rvm
